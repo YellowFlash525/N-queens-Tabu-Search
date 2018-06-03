@@ -1,0 +1,26 @@
+{
+  "name": "n-queens-tabu-search",
+  "version": "1.0.0",
+  "description": "N-queens-Tabu-Search",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YellowFlash525/N-queens-Tabu-Search.git"
+  },
+  "keywords": [
+    "Tabu",
+    "JS"
+  ],
+  "author": "Kamil Wocjik",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/YellowFlash525/N-queens-Tabu-Search/issues"
+  },
+  "homepage": "https://github.com/YellowFlash525/N-queens-Tabu-Search#readme",
+  "devDependencies": {
+    "lodash": "^4.17.10"
+  }
+}
