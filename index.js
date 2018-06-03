@@ -43,9 +43,7 @@ class TabuSearch {
 		let ncolls = 0;
 
 		for(let i in diagonal) {
-			if (diagonal[i] > 1) {
-				ncolls += diagonal[i] - 1;
-			}		
+			if (diagonal[i] > 1) ncolls += diagonal[i] - 1;	
 		}
 
 		return ncolls;
@@ -94,15 +92,15 @@ class TabuSearch {
 	}
 
 	increase(di,dj,ni,nj) {
-	    //Compute new collisions when queens are positioned.
-	   	//di, dj -- diagonals where queens will be placed
-	    //ni, nj -- number of queens on these diagonals
+    //Compute new collisions when queens are positioned.
+    //di, dj -- diagonals where queens will be placed
+    //ni, nj -- number of queens on these diagonals
 
-	    let delta = 0;
-	    if (ni >= 1) delta += 1;
-	    if (nj >= 1) delta += 1;
-	    if (di === dj && ni === 0) delta += 1; // on the same diagonal
-	    return delta;
+    let delta = 0;
+    if (ni >= 1) delta += 1;
+    if (nj >= 1) delta += 1;
+    if (di === dj && ni === 0) delta += 1; // on the same diagonal
+    return delta;
 	}
 
 	evaluateMove(i, j, solution, diagonalUp, diagonalDown) {
@@ -155,45 +153,15 @@ class TabuSearch {
         let delta = this.evaluateMove(I, J,solution,diagonalUp,diagonalDown);
 
         if ((tabu[I] < nIter) || (ncolls + delta < bestColls)) { //move is not tabu or satisfies aspiration criterion
-            if (delta < bestDelta){
-              bestDelta = delta;
-              bestI = I;
-              bestJ = J;
-            }
+          if (delta < bestDelta){
+            bestDelta = delta;
+            bestI = I;
+            bestJ = J;
+          }
         }
       }
     }
     return {bestI, bestJ, bestDelta};
-  }
-
-  search(solution, maxIter) {
-  	/*Local search: find local optimum starting from sol.
-  	Returns number of collisions of the local optimum.
-  	*/
-
-  	let n = this.matrixSize;
-  	let {diagonalUp, diagonalDown} = this.diagonals(solution);
-  	let ncolls = this.collisions(diagonalUp) + this.collisions(diagonalDown);
-  	let nIter = 0;
-  	while (true) {
-  	    nIter += 1;
-
-  	    let improved = false;
-	      for (var i = 0; i < n - 1; i++) {
-	    		for (var j = i + 1; j < n; j++) {
-	            let delta = this.evaluateMove(i,j,solution,diagonalUp,diagonalDown)
-	            if (delta < 0){
-	                improved = true;
-
-	                // execute the improvement: update the board
-	                this.exchange(i, j, solution, diagonalUp, diagonalDown)
-	                ncolls += delta;
-	            }
-	        }
-	      }
-  	    if (!improved)
-  	       return ncolls;
-  	}
   }
 
 	solve(tabuLength, maxIter, solution = this.solution) {
@@ -219,27 +187,27 @@ class TabuSearch {
 		// tabu information (iteration until which move from 'i' is forbidden):
 		let tabu = range(n).map(() => 0);
 		while ((nIter < maxIter) && (bestColls != 0)){
-		    nIter += 1;
+      nIter += 1;
 
-		    // determine the best move i
-		    //n the current neighborhood:
-		    let {bestI: i, bestJ: j, bestDelta: delta} = this.findMove(nIter, tabu, bestColls, solution, diagonalUp, diagonalDown, ncolls);
-		    if (typeof i === 'undefined') {
-		    	continue;
-		    }
-		    // update the board, executing the best move:
-		    this.exchange(i, j, solution, diagonalUp, diagonalDown);
-		    ncolls += parseInt(delta, 10);
+      // determine the best move i
+      //n the current neighborhood:
+      let {bestI: i, bestJ: j, bestDelta: delta} = this.findMove(nIter, tabu, bestColls, solution, diagonalUp, diagonalDown, ncolls);
+      if (typeof i === 'undefined') {
+        continue;
+      }
+      // update the board, executing the best move:
+      this.exchange(i, j, solution, diagonalUp, diagonalDown);
+      ncolls += parseInt(delta, 10);
 
-		    // update the tabu structure:
-		    // moves involving i will be tabu for 'tabuLength' iterations
-		    tabu[i] = nIter + tabuLength;
+      // update the tabu structure:
+      // moves involving i will be tabu for 'tabuLength' iterations
+      tabu[i] = nIter + tabuLength;
 
-		    // check if we improved the best:
-		    if (ncolls < bestColls){
-		        best = clone(solution);
-		        bestColls = ncolls;
-		    }
+      // check if we improved the best:
+      if (ncolls < bestColls){
+          best = clone(solution);
+          bestColls = ncolls;
+      }
 		}
 		// copy best solution found 
 		solution = best;
