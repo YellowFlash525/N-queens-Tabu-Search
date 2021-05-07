@@ -21,6 +21,6 @@
   },
   "homepage": "https://github.com/YellowFlash525/N-queens-Tabu-Search#readme",
   "devDependencies": {
-    "lodash": "^4.17.10"
+    "lodash": "^4.17.21"
   }
 }
